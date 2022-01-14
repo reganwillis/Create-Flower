@@ -12,4 +12,4 @@ CALL g++ -Wall -c main.cpp -IC:\SFML-gcc\SFML-2.5.1\include
 CALL g++ -Wall main.o -o randomize-pixel-art -LC:\SFML-gcc\SFML-2.5.1\lib -lsfml-graphics -lsfml-window -lsfml-system
 
 :: Run executable
-::CALL randomize-pixel-art.exe
+CALL randomize-pixel-art.exe
