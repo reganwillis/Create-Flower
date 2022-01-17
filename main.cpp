@@ -14,7 +14,7 @@
 sf::Image getImage() {
     // choose random number
     int numOfImageChosen = rand() % 1000;
-    std::cout << numOfImageChosen;  // debug
+    std::cout << "Image: " << numOfImageChosen;  // debug
 
     // declare image
     sf::Image imageChosen;
@@ -37,24 +37,122 @@ sf::Image getImage() {
     return imageChosen;
 }
 
-// TODO: color palette by randomly chosing one of 4 color palettes
+// color palettes (basic should match input image palette)
+struct color_palette {
+    sf::Color outline;
+    sf::Color stem;
+    sf::Color stem_detail;
+    sf::Color center;
+    sf::Color center_detail;
+    sf::Color petals;
+    sf::Color petals_detail;
+    sf::Color eye;
+    sf::Color pupil;
+} basic, dark, rare, ultrarare;
 
-// TODO: pass in color palette
-sf::Color changePixelColor(sf::Color currColor) {
-    sf::Color newColor;
+// get color palette by randomly chosing one of 4 color palettes
+color_palette getColorPalette() {
+    // define basic color palette (temporary colors)
+    basic.outline = sf::Color(0, 0, 0, 255);
+    basic.stem = sf::Color(0, 168, 0, 255);
+    basic.stem_detail = sf::Color(0, 104, 0, 255);
+    basic.center = sf::Color(160, 82, 45, 255);
+    basic.center_detail = sf::Color(205, 133, 63, 255);
+    basic.petals = sf::Color(238, 221, 130, 255);
+    basic.petals_detail = sf::Color(218, 165, 32, 255);
+    basic.eye = sf::Color(156, 252, 252, 255);
+    basic.pupil = sf::Color(0, 72, 252, 255);
 
-    // common palette background
-    if (currColor.r == 255 && currColor.g == 255 && currColor.b == 255 && currColor.a == 255) {
-        newColor.r = 0;
-        newColor.g = 0;
-        newColor.b = 0;
-        newColor.a = 0;
-    }
+    // define dark color palette (temporary colors)
+    dark.outline = sf::Color(0, 0, 0, 255);
+    dark.stem = sf::Color::Blue;
+    dark.stem_detail = sf::Color::Red;
+    dark.center = sf::Color::Blue;
+    dark.center_detail = sf::Color::Red;
+    dark.petals = sf::Color::Cyan;
+    dark.petals_detail = sf::Color::Red;
+    dark.eye = sf::Color::Cyan;
+    dark.pupil = sf::Color::Blue;
+
+    // define rare color palette (temporary colors)
+    rare.outline = sf::Color(0, 0, 0, 255);
+    rare.stem = sf::Color::Green;
+    rare.stem_detail = sf::Color::Red;
+    rare.center = sf::Color::Green;
+    rare.center_detail = sf::Color::Red;
+    rare.petals = sf::Color::Yellow;
+    rare.petals_detail = sf::Color::Red;
+    rare.eye = sf::Color::Yellow;
+    rare.pupil = sf::Color::Green;
+
+    // define ultrarare color palette (temporary colors)
+    ultrarare.outline = sf::Color(0, 0, 0, 255);
+    ultrarare.stem = sf::Color::White;
+    ultrarare.stem_detail = sf::Color::Red;
+    ultrarare.center = sf::Color::White;
+    ultrarare.center_detail = sf::Color::Red;
+    ultrarare.petals = sf::Color::Magenta;
+    ultrarare.petals_detail = sf::Color::Red;
+    ultrarare.eye = sf::Color::Magenta;
+    ultrarare.pupil = sf::Color::Blue;
+
+    // choose random number
+    int numOfColorPaletteChosen = rand() % 1000;
+    std::cout << "\nColor Palette: " << numOfColorPaletteChosen;  // debug
+
+    // declare color palette
+    color_palette colorPaletteChosen;
+
+    // randomly load the color palette
+    if (numOfColorPaletteChosen <= 899)
+        colorPaletteChosen = basic;
+    else if (numOfColorPaletteChosen > 899 && numOfColorPaletteChosen <= 989)
+        colorPaletteChosen = dark;
+    else if (numOfColorPaletteChosen > 989 && numOfColorPaletteChosen <= 998)
+        colorPaletteChosen = rare;
+    else if (numOfColorPaletteChosen == 999)
+        colorPaletteChosen = ultrarare;
     else {
-        newColor = currColor;
+        // default
+        std::cout << "ERROR: numOfColorPaletteChosen out of bounds: " << numOfColorPaletteChosen << ". Loading basic color palette.";
+        colorPaletteChosen = basic;
     }
 
-    return newColor;
+    return colorPaletteChosen;
+}
+
+// change pixel colors of image according to new palette
+sf::Image changePixelColorsToPalette(sf::Image img, color_palette palette) {
+    // if color palette chosen was basic do not change the image
+    if (palette.petals == basic.petals)  // TODO: overload = operator for more complete equality check
+        return img;
+
+    // traverse through all pixels
+    for (size_t i = 0; i < img.getSize().x; ++i) {
+        for (size_t j = 0; j < img.getSize().y; ++j) {
+            sf::Color currPixelColor = img.getPixel(i, j);
+
+            // change pixel colors according to new palette
+            if (currPixelColor == basic.stem)
+                img.setPixel(i, j, palette.stem);
+            else if (currPixelColor == basic.stem_detail)
+                img.setPixel(i, j, palette.stem_detail);
+            else if (currPixelColor == basic.center)
+                img.setPixel(i, j, palette.center);
+            else if (currPixelColor == basic.center_detail)
+                img.setPixel(i, j, palette.center_detail);
+            else if (currPixelColor == basic.petals)
+                img.setPixel(i, j, palette.petals);
+            else if (currPixelColor == basic.petals_detail)
+                img.setPixel(i, j, palette.petals_detail);
+            else if (currPixelColor == basic.eye)
+                img.setPixel(i, j, palette.eye);
+            else if (currPixelColor == basic.pupil)
+                img.setPixel(i, j, palette.pupil);
+        }
+    }
+
+    return img;
 }
 
 int main()
@@ -62,29 +160,15 @@ int main()
     // init random seed
     srand(time(0));
 
-    // TESTING getImage FUNCTION
+    // get random image
     sf::Image img = getImage();
-    img.saveToFile("./Images/chosenImage.png");
 
-    // TODO: randomly choose a color palette
-    // TODO: if color palette chosen was basic -> do not change the image
-    // TODO: else -> recreate the image with new color palette
-    
-    // TESTING changePixelColor FUNCTION
-    /*
-    // create new image with same dimensions as old image
-    sf::Image newImg;
-    newImg.create(loadedImg.getSize().x, loadedImg.getSize().y, sf::Color::Black);
+    // get random color palette
+    color_palette colors = getColorPalette();
 
-    for (size_t i = 0; i < loadedImg.getSize().x; ++i) {
-        for (size_t j = 0; j < loadedImg.getSize().y; ++j) {
-            sf::Color currPixelColor = loadedImg.getPixel(i, j);
-            newImg.setPixel(i, j, changePixelColor(currPixelColor));
-        }
-    }
+    // create new image with new color palette
+    sf::Image newImg = changePixelColorsToPalette(img, colors);
+    newImg.saveToFile("./Images/chosenImage.png");
 
-    // save new image to desktop
-    newImg.saveToFile("./Images/newImg.png");
-    */
     return 0;
 }
