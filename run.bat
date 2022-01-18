@@ -11,7 +11,7 @@ CALL g++ -Wall -c main.cpp -IC:\SFML-gcc\SFML-2.5.1\include
 
 :: Link modules into single executable
 :: -L<library path> - specify a lib directory
-CALL g++ -Wall main.o CreateFlower.o -o randomize-pixel-art -LC:\SFML-gcc\SFML-2.5.1\lib -lsfml-graphics -lsfml-window -lsfml-system
+CALL g++ -Wall main.o CreateFlower.o -o create-flower -LC:\SFML-gcc\SFML-2.5.1\lib -lsfml-graphics -lsfml-window -lsfml-system
 
 :: Run executable
-CALL randomize-pixel-art.exe
+CALL create-flower.exe

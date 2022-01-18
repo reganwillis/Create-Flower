@@ -31,16 +31,30 @@ class CreateFlower {
             sf::Color petals_detail;
             sf::Color eye;
             sf::Color pupil;
-        } basic, dark, rare, ultrarare;
+        } basic, random, dark, rare, ultrarare;
 
-        // flower image
-        sf::Image flower;
+        // rarity structure
+        struct Rarity {
+            bool common;
+            bool uncommon;
+            bool rare;
+            bool ultrarare; 
+        };
+
+        // flower
+        struct Flower {
+            sf::Image img;
+            Rarity rarity;
+            Palette palette;
+        } flower;
 
         // functions
-        sf::Image getImage();
         void initColorPalettes();
-        Palette getColorPalette();
-        sf::Image changePixelColorsToPalette(sf::Image img, Palette palette);
+        void initFlower();
+        void getBaseImage();
+        sf::Color generateRandomColor();
+        void addColorPalette();
+        void changePixelColorsToPalette();
 
     public:
         // constructors and deconstructors
@@ -48,7 +62,7 @@ class CreateFlower {
         virtual ~CreateFlower();
 
         // getters
-        sf::Image getFlower();
+        sf::Image getFlowerImg();
 };
 
 #endif
