@@ -1,7 +1,8 @@
 #include "CreateFlower.h"
 
-void CreateFlower::initColorPalettes() {
-    // define basic color palette (should match input image palette)
+// define basic color palette (must match input image palette)
+void CreateFlower::initBasicPalette() {
+    this->basic.background = sf::Color(255, 255, 255, 255);
     this->basic.outline = sf::Color(0, 0, 0, 255);
     this->basic.stem = sf::Color(0, 168, 0, 255);
     this->basic.stem_detail = sf::Color(0, 104, 0, 255);
@@ -11,43 +12,10 @@ void CreateFlower::initColorPalettes() {
     this->basic.petals_detail = sf::Color(218, 165, 32, 255);
     this->basic.eye = sf::Color(156, 252, 252, 255);
     this->basic.pupil = sf::Color(0, 72, 252, 255);
-
-    // TODO: init any other curated color palettes
-
-    // define dark color palette
-    this->dark.outline = sf::Color(0, 0, 0, 255);
-    this->dark.stem = sf::Color::Blue;
-    this->dark.stem_detail = sf::Color::Red;
-    this->dark.center = sf::Color::Blue;
-    this->dark.center_detail = sf::Color::Red;
-    this->dark.petals = sf::Color::Cyan;
-    this->dark.petals_detail = sf::Color::Red;
-    this->dark.eye = sf::Color::Cyan;
-    this->dark.pupil = sf::Color::Blue;
-
-    // define rare color palette
-    this->rare.outline = sf::Color(0, 0, 0, 255);
-    this->rare.stem = sf::Color::Green;
-    this->rare.stem_detail = sf::Color::Red;
-    this->rare.center = sf::Color::Green;
-    this->rare.center_detail = sf::Color::Red;
-    this->rare.petals = sf::Color::Yellow;
-    this->rare.petals_detail = sf::Color::Red;
-    this->rare.eye = sf::Color::Yellow;
-    this->rare.pupil = sf::Color::Green;
-
-    // define ultrarare color palette
-    this->ultrarare.outline = sf::Color(0, 0, 0, 255);
-    this->ultrarare.stem = sf::Color::White;
-    this->ultrarare.stem_detail = sf::Color::Red;
-    this->ultrarare.center = sf::Color::White;
-    this->ultrarare.center_detail = sf::Color::Red;
-    this->ultrarare.petals = sf::Color::Magenta;
-    this->ultrarare.petals_detail = sf::Color::Red;
-    this->ultrarare.eye = sf::Color::Magenta;
-    this->ultrarare.pupil = sf::Color::Blue;
+    this->basic.petals_background = sf::Color(255, 192, 203, 255);
 }
 
+// initialize flower rarity and palette
 void CreateFlower::initFlower() {
     // initialize flower with no rarity
     this->flower.rarity.common = false;
@@ -58,13 +26,14 @@ void CreateFlower::initFlower() {
     // input flower image has basic color palette
     this->flower.palette = this->basic;
 
-    std::cout << "\nflower initialized with no rarity and basic palette";  // debug
+    std::cout << "\nFlower initialized with no rarity and basic palette.";  // debug
 }
 
 // get pixel art by randomly chosing one of 4 images
-void CreateFlower::getBaseImage() {
+void CreateFlower::setRarity() {
     // choose random number
     int numOfImageChosen = rand() % 1000;
+    //numOfImageChosen = 999;  // debug
     std::cout << "\nBase Image: " << numOfImageChosen;  // debug
 
     // randomly load the image
@@ -110,27 +79,17 @@ sf::Color CreateFlower::generateRandomColor() {
 
 // create color palette according to art
 void CreateFlower::addColorPalette() {
-
-    if (this->flower.rarity.common == true) {
-        // fill flower palette with randomly generated colors
-        this->flower.palette.stem = generateRandomColor();
-        this->flower.palette.stem_detail = generateRandomColor();
-        this->flower.palette.center = generateRandomColor();
-        this->flower.palette.center_detail = generateRandomColor();
-        this->flower.palette.petals = generateRandomColor();
-        this->flower.palette.petals_detail = generateRandomColor();
-        this->flower.palette.eye = generateRandomColor();
-        this->flower.palette.pupil = generateRandomColor();
-        std::cout << "\nflower palette set";  // debug
-    }
-    else {
-        // default
-        std::cout << "\nERROR: flower rarity not specified. Loading dark color palette.";
-        this->flower.palette = this->dark;
-    }
-    // TODO: else if (this->flower.rarity.uncommon == true) {}
-    // TODO: else if (this->flower.rarity.rare == true) {}
-    // TODO: else if (this->flower.rarity.ultrarare == true) {}
+    // fill flower palette with randomly generated colors
+    this->flower.palette.stem = generateRandomColor();
+    this->flower.palette.stem_detail = generateRandomColor();
+    this->flower.palette.center = generateRandomColor();
+    this->flower.palette.center_detail = generateRandomColor();
+    this->flower.palette.petals = generateRandomColor();
+    this->flower.palette.petals_detail = generateRandomColor();
+    this->flower.palette.eye = generateRandomColor();
+    this->flower.palette.pupil = generateRandomColor();
+    this->flower.palette.petals_background = generateRandomColor();
+    std::cout << "\nFlower palette set.";  // debug
 }
 
 // change pixel colors of image according to new palette
@@ -140,32 +99,40 @@ void CreateFlower::changePixelColorsToPalette() {
         for (size_t j = 0; j < this->flower.img.getSize().y; ++j) {
             sf::Color currPixelColor = this->flower.img.getPixel(i, j);
 
-            // change pixel colors according to new palette
-            if (currPixelColor == this->basic.stem)
-                this->flower.img.setPixel(i, j, this->flower.palette.stem);
-            else if (currPixelColor == this->basic.stem_detail)
-                this->flower.img.setPixel(i, j, this->flower.palette.stem_detail);
-            else if (currPixelColor == this->basic.center)
-                this->flower.img.setPixel(i, j, this->flower.palette.center);
-            else if (currPixelColor == this->basic.center_detail)
-                this->flower.img.setPixel(i, j, this->flower.palette.center_detail);
-            else if (currPixelColor == this->basic.petals)
-                this->flower.img.setPixel(i, j, this->flower.palette.petals);
-            else if (currPixelColor == this->basic.petals_detail)
-                this->flower.img.setPixel(i, j, this->flower.palette.petals_detail);
-            else if (currPixelColor == this->basic.eye)
-                this->flower.img.setPixel(i, j, this->flower.palette.eye);
-            else if (currPixelColor == this->basic.pupil)
-                this->flower.img.setPixel(i, j, this->flower.palette.pupil);
+            if (this->flower.rarity.ultrarare == true) {
+                if (currPixelColor != this->basic.outline && currPixelColor != this->basic.background)
+                    this->flower.img.setPixel(i, j, generateRandomColor());
+            }
+            else {
+                // change pixel colors according to new palette
+                if (currPixelColor == this->basic.stem)
+                    this->flower.img.setPixel(i, j, this->flower.palette.stem);
+                else if (currPixelColor == this->basic.stem_detail)
+                    this->flower.img.setPixel(i, j, this->flower.palette.stem_detail);
+                else if (currPixelColor == this->basic.center)
+                    this->flower.img.setPixel(i, j, this->flower.palette.center);
+                else if (currPixelColor == this->basic.center_detail)
+                    this->flower.img.setPixel(i, j, this->flower.palette.center_detail);
+                else if (currPixelColor == this->basic.petals)
+                    this->flower.img.setPixel(i, j, this->flower.palette.petals);
+                else if (currPixelColor == this->basic.petals_detail)
+                    this->flower.img.setPixel(i, j, this->flower.palette.petals_detail);
+                else if (currPixelColor == this->basic.eye)
+                    this->flower.img.setPixel(i, j, this->flower.palette.eye);
+                else if (currPixelColor == this->basic.pupil)
+                    this->flower.img.setPixel(i, j, this->flower.palette.pupil);
+                else if (currPixelColor == this->basic.petals_background)
+                    this->flower.img.setPixel(i, j, this->flower.palette.petals_background);
+            }
         }
     }
 }
 
 // constructor
 CreateFlower::CreateFlower() {
-    this->initColorPalettes();
+    this->initBasicPalette();
     this->initFlower();
-    this->getBaseImage();
+    this->setRarity();
     this->addColorPalette();
     this->changePixelColorsToPalette();
 }

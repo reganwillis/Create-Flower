@@ -22,6 +22,7 @@ class CreateFlower {
     private:
         // color palettes
         struct Palette {
+            sf::Color background;
             sf::Color outline;
             sf::Color stem;
             sf::Color stem_detail;
@@ -31,7 +32,8 @@ class CreateFlower {
             sf::Color petals_detail;
             sf::Color eye;
             sf::Color pupil;
-        } basic, random, dark, rare, ultrarare;
+            sf::Color petals_background;
+        } basic;
 
         // rarity structure
         struct Rarity {
@@ -49,9 +51,9 @@ class CreateFlower {
         } flower;
 
         // functions
-        void initColorPalettes();
+        void initBasicPalette();
         void initFlower();
-        void getBaseImage();
+        void setRarity();
         sf::Color generateRandomColor();
         void addColorPalette();
         void changePixelColorsToPalette();
