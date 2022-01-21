@@ -13,6 +13,7 @@ void CreateFlower::initBasicPalette() {
     this->basic.eye = sf::Color(156, 252, 252, 255);
     this->basic.pupil = sf::Color(0, 72, 252, 255);
     this->basic.petals_background = sf::Color(255, 192, 203, 255);
+    this->basic.petals_foreground = sf::Color(226, 106, 106);
 }
 
 // initialize flower rarity and palette
@@ -38,29 +39,44 @@ void CreateFlower::setRarity() {
 
     // randomly load the image
     if (numOfImageChosen <= 899) {
-        this->flower.img.loadFromFile("Images/little-flower-common.png");
+        this->img_arr[0] = "Input/little-flower-stage-0.png";
+        this->img_arr[1] = "Input/little-flower-stage-1.png";
+        this->img_arr[2] = "Input/little-flower-stage-2-common.png";
+        this->img_arr[3] = "Input/little-flower-stage-3-common.png";
         this->flower.rarity.common = true;
         std::cout << "\ncommon flower created";  // debug
     }
     else if (numOfImageChosen > 899 && numOfImageChosen <= 989) {
-        this->flower.img.loadFromFile("Images/little-flower-uncommon.png");
+        this->img_arr[0] = "Input/little-flower-stage-0.png";
+        this->img_arr[1] = "Input/little-flower-stage-1.png";
+        this->img_arr[2] = "Input/little-flower-stage-2-uncommon.png";
+        this->img_arr[3] = "Input/little-flower-stage-3-uncommon.png";
         this->flower.rarity.uncommon = true;
         std::cout << "\nuncommon flower created";  // debug
     }
     else if (numOfImageChosen > 989 && numOfImageChosen <= 998) {
-        this->flower.img.loadFromFile("Images/little-flower-rare.png");
+        this->img_arr[0] = "Input/little-flower-stage-0.png";
+        this->img_arr[1] = "Input/little-flower-stage-1.png";
+        this->img_arr[2] = "Input/little-flower-stage-2-uncommon.png";
+        this->img_arr[3] = "Input/little-flower-stage-3-rare.png";
         this->flower.rarity.rare = true;
         std::cout << "\nrare flower created";  // debug
     }
     else if (numOfImageChosen == 999) {
-        this->flower.img.loadFromFile("Images/little-flower-ultrarare.png");
+        this->img_arr[0] = "Input/little-flower-stage-0.png";
+        this->img_arr[1] = "Input/little-flower-stage-1.png";
+        this->img_arr[2] = "Input/little-flower-stage-2.png";
+        this->img_arr[3] = "Input/little-flower-stage-3.png";
         this->flower.rarity.ultrarare = true;
         std::cout << "\nultrarare flower created";  // debug
     }
     else {
         // default
         std::cout << "\nERROR: numOfImageChosen out of bounds: " << numOfImageChosen << ". Loading common image.";
-        this->flower.img.loadFromFile("Images/little-flower-common.png");
+        this->img_arr[0] = "Input/little-flower-stage-0.png";
+        this->img_arr[1] = "Input/little-flower-stage-1.png";
+        this->img_arr[2] = "Input/little-flower-stage-2-common.png";
+        this->img_arr[3] = "Input/little-flower-stage-3-common.png";
         this->flower.rarity.common = true;
         std::cout << "\ndefault common flower created";  // debug
     }
@@ -89,6 +105,7 @@ void CreateFlower::addColorPalette() {
     this->flower.palette.eye = generateRandomColor();
     this->flower.palette.pupil = generateRandomColor();
     this->flower.palette.petals_background = generateRandomColor();
+    this->flower.palette.petals_foreground = generateRandomColor();
     std::cout << "\nFlower palette set.";  // debug
 }
 
@@ -123,8 +140,19 @@ void CreateFlower::changePixelColorsToPalette() {
                     this->flower.img.setPixel(i, j, this->flower.palette.pupil);
                 else if (currPixelColor == this->basic.petals_background)
                     this->flower.img.setPixel(i, j, this->flower.palette.petals_background);
+                else if (currPixelColor == this->basic.petals_foreground)
+                    this->flower.img.setPixel(i, j, this->flower.palette.petals_foreground);
             }
         }
+    }
+}
+
+void CreateFlower::saveImages() {
+
+    for (int i = 0; i < 4; ++i) {
+        this->flower.img.loadFromFile(img_arr[i]);
+        this->changePixelColorsToPalette();
+        this->flower.img.saveToFile(std::string("./Output/little-flower-stage-") + std::to_string(i) + ".png");
     }
 }
 
@@ -134,7 +162,8 @@ CreateFlower::CreateFlower() {
     this->initFlower();
     this->setRarity();
     this->addColorPalette();
-    this->changePixelColorsToPalette();
+    //this->changePixelColorsToPalette();
+    this->saveImages();
 }
 
 // deconstructor

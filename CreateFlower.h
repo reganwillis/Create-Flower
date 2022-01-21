@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <time.h>
+#include <string>
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
@@ -33,6 +34,7 @@ class CreateFlower {
             sf::Color eye;
             sf::Color pupil;
             sf::Color petals_background;
+            sf::Color petals_foreground;
         } basic;
 
         // rarity structure
@@ -49,6 +51,7 @@ class CreateFlower {
             Rarity rarity;
             Palette palette;
         } flower;
+        std::string img_arr[4];
 
         // functions
         void initBasicPalette();
@@ -57,7 +60,7 @@ class CreateFlower {
         sf::Color generateRandomColor();
         void addColorPalette();
         void changePixelColorsToPalette();
-
+        void saveImages();
     public:
         // constructors and deconstructors
         CreateFlower();
