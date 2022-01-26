@@ -152,7 +152,7 @@ void CreateFlower::saveImages() {
     for (int i = 0; i < 4; ++i) {
         this->flower.img.loadFromFile(img_arr[i]);
         this->changePixelColorsToPalette();
-        this->flower.img.saveToFile(std::string("./Output/little-flower-stage-") + std::to_string(i) + ".png");
+        this->flower.img.saveToFile(std::string("Output/little-flower-stage-") + std::to_string(i) + ".png");
     }
 }
 
