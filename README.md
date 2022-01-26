@@ -7,7 +7,7 @@ After the base art piece has been chosen, a random color scheme will be mapped o
 
 ## Usage
 This program uses [Simple and Fast Multimedia Library](https://www.sfml-dev.org/). [Download the library](https://www.sfml-dev.org/download.php) and copy all the *.dll files from the bin into this repository. The *.dll files must be in the same level as the output .exe file. Include the path to the library in the g++ compilations as shown in `run.bat`.
-The file `main.cpp` shows how to include the class and use it in a main method. This program will save the output files to `./Output/little-flower-stage-<0-3>.png`.
+The file `main.cpp` shows how to include the class and use it in a main method. This program will save the output files to `./Output/little-flower-stage-<0-3>.png`. For running this program within this repo use the `run` command. After `create-flower.exe` is generated, move it a level up before running. When in the [Little Flower repository](https://github.com/reganwillis/Little-Flower) this means move it to the Little-Flower folder, the same folder that `little-flower.exe` is compiled.
 
 ## Color Mapping
 The color palettes are defined with SFML colors in the function `CreateFlower::initColorPalettes()`. The Palette type has attributes that are named according to the colors in the pixel art flowers: `background`, `outline`, `stem`, `stem_detail`, `center`, `center_detail`, `petals`, `petals_detail`, `eye`, `pupil`, `petals_background`, and `petals_foreground`. The "basic" color palette match the color palette of the input images.
