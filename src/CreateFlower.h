@@ -61,6 +61,7 @@ class CreateFlower {
         void addColorPalette();
         void changePixelColorsToPalette();
         void saveImages();
+        void saveMetadata();
     public:
         // constructors and deconstructors
         CreateFlower();

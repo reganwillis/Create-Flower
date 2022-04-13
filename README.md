@@ -12,7 +12,24 @@ After the base flower has been chosen, a random color scheme will be mapped onto
 This repository is designed to be used in the [Little Flower repository](https://github.com/reganwillis/Little-Flower). Every time a new game is started (on game open and after pressing the restart button) a new flower will be created. For independent usage follow the instructions below:
 
 ### Development
-For developers, clone this repository and use the batch script instructions below to create and run the EXE. All libraries will need to be downloaded and all .dll files from SFML/bin need to be added to the project folder. This program will save the output files to `./Output/little-flower-stage-<0-3>.png`.
+For developers, clone this repository and use the batch script instructions below to create and run the EXE. All libraries will need to be downloaded and all .dll files from SFML/bin need to be added to the project folder. This program will save the output images to `./Output/little-flower-stage-<0-3>.png`. It will also save the final image to `../Create-Tezos-NFT/dist/little-flower-nft.jpg` to be used in Create-Tezos-NFT. It will save the output JSON attributes as a text file to `../Create-Tezos-NFT/dist/attributes.txt` with the format:
+
+    {
+        "rarity": "",
+        "rgb_values": {
+            "stem": "",
+            "stem_detail": "",
+            "center": "",
+            "center_detail": "",
+            "petals": "",
+            "petals_detail": "",
+            "eye": "",
+            "pupil": "",
+            "petals_background": "",
+            "petals_foreground": ""
+        }
+    }
+where "rarity" is "common", "uncommon", "rare", or "ultrarare" and the values for all the rgb_values attributes are in the format "(<0-255>, <0-255>, <0-255>)".
 
 #### Batch Script
 Use the command `run` in the windows command line to run the batch script. This will run the commands below:
@@ -35,4 +52,4 @@ run new app:
 The file `src/main.cpp` shows how to include the class and use it in a main method. Then access the files in the `./Output` folder to use in a project.
 
 ## Color Mapping
-The color palettes are defined with SFML colors in the function `CreateFlower::initColorPalettes()`. The Palette type has attributes that are named according to the colors in the pixel art flowers: `background`, `outline`, `stem`, `stem_detail`, `center`, `center_detail`, `petals`, `petals_detail`, `eye`, `pupil`, `petals_background`, and `petals_foreground`. The "basic" color palette match the color palette of the input images.
+The color palettes are defined with SFML colors in the function `CreateFlower::initColorPalettes()`. The Palette type has attributes that are named according to the colors in the pixel art flowers: `stem`, `stem_detail`, `center`, `center_detail`, `petals`, `petals_detail`, `eye`, `pupil`, `petals_background`, and `petals_foreground`. The "basic" color palette match the color palette of the input images.

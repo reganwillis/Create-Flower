@@ -1,4 +1,6 @@
 #include "CreateFlower.h"
+#include <iostream>
+#include <fstream>
 
 // define basic color palette (must match input image palette)
 void CreateFlower::initBasicPalette() {
@@ -147,13 +149,57 @@ void CreateFlower::changePixelColorsToPalette() {
     }
 }
 
+// save images to output folder
 void CreateFlower::saveImages() {
 
     for (int i = 0; i < 4; ++i) {
         this->flower.img.loadFromFile(img_arr[i]);
         this->changePixelColorsToPalette();
         this->flower.img.saveToFile(std::string("Create-Flower/Output/little-flower-stage-") + std::to_string(i) + ".png");
+
+        // save nft image to create-tezos-nft output folder
+        if (i == 3)
+            this->flower.img.saveToFile(std::string("./Create-Tezos-NFT/dist/little-flower-nft.jpg"));
     }
+}
+
+void CreateFlower::saveMetadata() {
+    std::string rarity = "";
+
+    if (this->flower.rarity.common) {
+        rarity = "common";
+    }
+    else if (this->flower.rarity.uncommon) {
+        rarity = "uncommon";
+    }
+    else if (this->flower.rarity.rare) {
+        rarity = "rare";
+    }
+    else if (this->flower.rarity.ultrarare) {
+        rarity = "ultrarare";
+    }
+    else {
+        std::cout << "Error: Unable to set rarity in CreateFlower::saveJSON." << std::endl;
+    }
+
+    // create metadata in JSON parsable format
+    std::string flower_metadata = "{\n\t\"rarity\": \""+rarity+"\", \n\t\"rgb_values\": { "+
+    "\n\t\t\"stem\": \"("+std::to_string(this->flower.palette.stem.r)+", "+std::to_string(this->flower.palette.stem.g)+", "+std::to_string(this->flower.palette.stem.b)+")\","+
+    "\n\t\t\"stem_detail\": \"("+std::to_string(this->flower.palette.stem_detail.r)+", "+std::to_string(this->flower.palette.stem_detail.g)+", "+std::to_string(this->flower.palette.stem_detail.b)+")\","+
+    "\n\t\t\"center\": \"("+std::to_string(this->flower.palette.center.r)+", "+std::to_string(this->flower.palette.center.g)+", "+std::to_string(this->flower.palette.center.b)+")\","+
+    "\n\t\t\"center_detail\": \"("+std::to_string(this->flower.palette.center_detail.r)+", "+std::to_string(this->flower.palette.center_detail.g)+", "+std::to_string(this->flower.palette.center_detail.b)+")\","+
+    "\n\t\t\"petals\": \"("+std::to_string(this->flower.palette.petals.r)+", "+std::to_string(this->flower.palette.petals.g)+", "+std::to_string(this->flower.palette.petals.b)+")\","+
+    "\n\t\t\"petals_detail\": \"("+std::to_string(this->flower.palette.petals_detail.r)+", "+std::to_string(this->flower.palette.petals_detail.g)+", "+std::to_string(this->flower.palette.petals_detail.b)+")\","+
+    "\n\t\t\"eye\": \"("+std::to_string(this->flower.palette.eye.r)+", "+std::to_string(this->flower.palette.eye.g)+", "+std::to_string(this->flower.palette.eye.b)+")\","+
+    "\n\t\t\"pupil\": \"("+std::to_string(this->flower.palette.pupil.r)+", "+std::to_string(this->flower.palette.pupil.g)+", "+std::to_string(this->flower.palette.pupil.b)+")\","+
+    "\n\t\t\"petals_background\": \"("+std::to_string(this->flower.palette.petals_background.r)+", "+std::to_string(this->flower.palette.petals_background.g)+", "+std::to_string(this->flower.palette.petals_background.b)+")\","+
+    "\n\t\t\"petals_foreground\": \"("+std::to_string(this->flower.palette.petals_foreground.r)+", "+std::to_string(this->flower.palette.petals_foreground.g)+", "+std::to_string(this->flower.palette.petals_foreground.b)+")\""+
+    "\n\t}\n}";
+    
+    // write metadata to output file in create-tezos-nft
+    std::ofstream attributes_file("./Create-Tezos-NFT/dist/attributes.txt");
+    attributes_file << flower_metadata;
+    attributes_file.close();
 }
 
 // constructor
@@ -162,8 +208,8 @@ CreateFlower::CreateFlower() {
     this->initFlower();
     this->setRarity();
     this->addColorPalette();
-    //this->changePixelColorsToPalette();
     this->saveImages();
+    this->saveMetadata();
 }
 
 // deconstructor
