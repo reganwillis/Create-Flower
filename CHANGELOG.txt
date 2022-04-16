@@ -1,0 +1,4 @@
+CHANGELOG
+
+1.0.0 (2022-16-04)
+* Randomly generate pixel art with flower type and color palette.
